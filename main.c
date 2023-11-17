@@ -107,19 +107,19 @@ void handleInput (Node *liskedListHead) {
 	{
 	case 'A':
 	case 'a':
-		
+		handleA(liskedListHead);
 		break;
 	case 'B':
 	case 'b':
-		
+		handleB(liskedListHead);
 		break;
 	case 'C':
 	case 'c':
-		
+		handleC(liskedListHead);
 		break;
 	case 'D':
 	case 'd':
-		
+		handleD(liskedListHead);
 		break;
 	default:
 		break;
