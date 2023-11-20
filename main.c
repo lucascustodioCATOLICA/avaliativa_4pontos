@@ -37,7 +37,7 @@ Node* initiateList () {
     strcpy(one->data.gasType, "alcool");
     strcpy(one->data.model, "Ford K");
     strcpy(one->data.color, "Branco");
-    strcpy(one->data.placa, "ASD1324");
+    strcpy(one->data.placa, "ASD1304");
     one->data.year = 2000;
     one->data.numChassi = rand();
 	Node *sec = malloc(sizeof(Node));
@@ -53,7 +53,7 @@ Node* initiateList () {
     strcpy(third->data.gasType, "gasolina");
     strcpy(third->data.model, "Fiat Toro");
     strcpy(third->data.color, "Vermelho");
-    strcpy(third->data.placa, "GFF4535");
+    strcpy(third->data.placa, "GAF4536");
     third->data.year = 2020;
     third->data.numChassi = rand();
 	Node *four = malloc(sizeof(Node));
@@ -61,7 +61,7 @@ Node* initiateList () {
     strcpy(four->data.gasType, "alcool");
     strcpy(four->data.model, "Fiat Punto");
     strcpy(four->data.color, "Preto");
-    strcpy(four->data.placa, "FFS1423");
+    strcpy(four->data.placa, "JFS1422");
     four->data.year = 2016;
     four->data.numChassi = rand();
 	Node *five = malloc(sizeof(Node));
@@ -69,7 +69,7 @@ Node* initiateList () {
     strcpy(five->data.gasType, "gasolina");
     strcpy(five->data.model, "Ford Focus");
     strcpy(five->data.color, "Branco");
-    strcpy(five->data.placa, "GSL1423");
+    strcpy(five->data.placa, "GAL1423");
     five->data.year = 2016;
     five->data.numChassi = rand();
 
@@ -88,15 +88,119 @@ void handleReadAll (Node *liskedListHead) {
 
     Node *index = liskedListHead;
 	while(index != NULL) {
-        printf("%s \n", index->data.owner);
+        printf("%d \n", index->data.numChassi);
         index = index->next;
     }
 }
 
-void handleA (Node *liskedListHead) {}
-void handleB (Node *liskedListHead) {}
-void handleC (Node *liskedListHead) {}
-void handleD (Node *liskedListHead) {}
+void handleA (Node *liskedListHead) {
+    printf("--- PROPRIETARIOS DE CARROS DO ANO DE 2010 OU POSTERIOR MOVIDO A DIESEL --- \n\n");    
+    Node *index = liskedListHead;
+	while(index != NULL) {
+        if (index->data.year >= 2010 && strcmp(index->data.gasType, "diesel") == 0) {
+            printf("PROPRIETARIO: %s \n", index->data.owner);
+            printf("\n");
+        }
+        index = index->next;
+    }   
+}
+
+void handleB (Node *liskedListHead) {
+    printf("--- TODAS AS PLACAS QUE COMECEM COM A LETRA J E TERMINEM COM 0, 2, 4 OU 7 --- \n\n");    
+    Node *index = liskedListHead;
+	while(index != NULL) {
+        if (index->data.placa[0] == 'J' &&
+            (
+                index->data.placa[6] == '0' ||
+                index->data.placa[6] == '2' ||
+                index->data.placa[6] == '4' ||
+                index->data.placa[6] == '7'
+            )
+        ) {
+            printf("PLACA: %s \n", index->data.placa);
+            printf("PROPRIETARIO: %s \n", index->data.owner);
+            printf("\n");
+        }
+        index = index->next;
+    }   
+}
+
+void handleC (Node *liskedListHead) {
+    printf("--- MODELO E A COR DOS VEÍCULOS CUJAS PLACAS POSSUEM COMO SEGUNDA LETRA UMA VOGAL E CUJA SOMA DOS VALORES NUMÉRICOS FORNECE UM NÚMERO PAR --- \n\n");    
+    Node *index = liskedListHead;
+	while(index != NULL) {
+        if (
+            index->data.placa[1] == 'A' ||
+            index->data.placa[1] == 'E' ||
+            index->data.placa[1] == 'I' ||
+            index->data.placa[1] == 'O' ||
+            index->data.placa[1] == 'U'
+        ) {
+            int somaNum = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                if(
+                    index->data.placa[i] == '0' ||
+                    index->data.placa[i] == '1' ||
+                    index->data.placa[i] == '2' ||
+                    index->data.placa[i] == '3' ||
+                    index->data.placa[i] == '4' ||
+                    index->data.placa[i] == '5' ||
+                    index->data.placa[i] == '6' ||
+                    index->data.placa[i] == '7' ||
+                    index->data.placa[i] == '8' ||
+                    index->data.placa[i] == '9'
+                ) {
+                    somaNum += (int) index->data.placa[i];
+                }
+            }
+
+            if(somaNum % 2 == 0) {
+                printf("MODELO: %s \n", index->data.model);
+                printf("COR: %s \n", index->data.color);
+                printf("\n");
+            }
+        }
+        index = index->next;
+    }   
+}
+
+void handleD (Node *liskedListHead) {
+    printf("--- TROCA DE PROPRIETÁRIO COM O FORNECIMENTO DO NÚMERO DO CHASSI APENAS PARA CARROS COM PLACAS QUE NÃO POSSUAM NENHUM DÍGITO IGUAL A ZERO --- \n\n");    
+    int numChassi;
+    printf("DIGITE O NUMERO DO CHASSI: ");    
+    scanf("%d", &numChassi);
+
+    Node *index = liskedListHead;
+	while(index != NULL) {
+        if(numChassi == index->data.numChassi) {
+            int hasZero = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                if (index->data.placa[i] == '0') {
+                    hasZero = 1;
+                    break;
+                }
+            }
+
+            if(hasZero == 1) {
+                index = index->next;
+            } else {
+                char newOwner[64];	
+                printf("DIGITE O NOME DO PROPRIETARIO: ");  
+                fflush(stdin);
+                fgets(newOwner, 64, stdin);
+                fflush(stdin);
+                strcpy(index->data.owner, newOwner);
+
+                printf("\n");
+                printf("NOVO PROPRIETARIO CADASTRADO COM SUCESSO!");
+                return;
+            }
+        }
+    }   
+    fflush(stdin);
+}
 
 void handleInput (Node *liskedListHead) {
 	char input;
